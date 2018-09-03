@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+  <com.choucheng.dongzhibot.view.TitleView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:mTitle="商户推广"
+      />
+  <com.gcssloop.widget.RCRelativeLayout
+      android:padding="20dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="24dp"
+      android:layout_marginLeft="24dp"
+      android:layout_marginRight="24dp"
+      app:round_corner="30dp">
+    <TextView
+        android:id="@+id/collect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main_blue"
+        android:padding="16dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:text="商户信息采集"
+        />
+  </com.gcssloop.widget.RCRelativeLayout>
+
+  <com.gcssloop.widget.RCRelativeLayout
+      android:padding="20dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="24dp"
+      android:layout_marginRight="24dp"
+      app:stroke_color="@color/main_blue"
+      app:stroke_width="2dp"
+      app:round_corner="30dp">
+    <TextView
+        android:id="@+id/see"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="16dp"
+        android:gravity="center"
+        android:text="查看商户信息"
+        />
+  </com.gcssloop.widget.RCRelativeLayout>
+
+</LinearLayout>

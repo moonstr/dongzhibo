@@ -1,0 +1,65 @@
+apply plugin: 'com.android.application'
+//apply plugin: 'android-apt'
+android {
+    compileSdkVersion 27
+
+    signingConfigs {
+        debug {
+            storeFile file("dongzhibo.jks")
+            keyAlias "dongzhibo"
+            storePassword "dzb123456"
+            keyPassword "dzb123456"
+        }
+        release {
+            storeFile file("dongzhibo.jks")
+            keyAlias "dongzhibo"
+            storePassword "dzb123456"
+            keyPassword "dzb123456"
+        }
+    }
+    defaultConfig {
+        applicationId "com.choucheng.dongzhibot"
+        minSdkVersion 17
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
+        multiDexEnabled true
+    }
+    dexOptions {
+        jumboMode true
+        preDexLibraries = false
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    provided fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    implementation 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.gcssloop.widget:rclayout:1.4.1@aar'
+    implementation project(':library')
+    implementation project(':multi-image-selector')
+    //基础工具库
+    implementation 'com.github.vondear.RxTool:RxKit:v2.0.4'
+    //UI库
+    implementation 'com.github.vondear.RxTool:RxUI:v2.0.4'
+    //功能库（Zxing扫描与生成二维码条形码 支付宝 微信）
+    implementation 'com.github.vondear.RxTool:RxFeature:v2.0.4'
+    //ArcGis For Android工具库（API：100.1以上版本）
+    implementation 'com.github.vondear.RxTool:RxArcGisKit:v2.0.4'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
+    compile 'com.github.Othershe:CalendarView:1.2.1'
+    compile 'com.android.support:multidex:1.0.3'
+//    compile 'com.github.hotchemi:permissionsdispatcher:2.2.0'
+//    apt 'com.github.hotchemi:permissionsdispatcher-processor:2.2.0'
+    implementation files('libs/AMap_Location_V4.2.0_20180809.jar')
+}

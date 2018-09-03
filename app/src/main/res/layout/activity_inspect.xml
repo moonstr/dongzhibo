@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.choucheng.dongzhibot.view.TitleView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:mRightImage="@mipmap/add_image"
+        app:mTitle="开始巡检" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:text="请输入POS编号或终端序列号"
+        android:textSize="16sp" />
+
+    <com.gcssloop.widget.RCRelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:padding="16dp"
+        app:round_corner="8dp"
+        app:stroke_color="@color/grey"
+        app:stroke_width="2dp">
+
+        <EditText
+            android:id="@+id/code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:padding="16dp" />
+    </com.gcssloop.widget.RCRelativeLayout>
+
+    <com.gcssloop.widget.RCRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:padding="20dp"
+        app:round_corner="30dp">
+
+        <TextView
+            android:id="@+id/confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/main_blue"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="确定"
+            android:textColor="@color/white" />
+    </com.gcssloop.widget.RCRelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="今日已巡检次数:"
+            android:textSize="@dimen/sp_13" />
+
+        <TextView
+            android:id="@+id/tv_num_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/red"
+            android:textSize="@dimen/sp_18"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="次"
+            android:textSize="@dimen/sp_13" />
+    </LinearLayout>
+</LinearLayout>
