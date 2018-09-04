@@ -24,6 +24,7 @@ import com.choucheng.dongzhibot.base.BaseActivity;
 import com.choucheng.dongzhibot.bean.ErrorListBean;
 import com.choucheng.dongzhibot.bean.UploadBean;
 import com.choucheng.dongzhibot.modle.DongZhiModle;
+import com.choucheng.dongzhibot.utils.ShowPictureDialog;
 import com.vondear.rxtool.view.RxToast;
 
 import java.util.ArrayList;
@@ -189,6 +190,8 @@ public class ErrorListActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == photos.size() - 1) {
                     openGallery(new ArrayList<String>(), 5, true, 1);
+                } else {
+                    new ShowPictureDialog().showPicture(ErrorListActivity.this, photos.get(i));
                 }
             }
         });

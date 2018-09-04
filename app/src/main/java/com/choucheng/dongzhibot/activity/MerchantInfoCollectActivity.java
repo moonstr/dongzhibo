@@ -33,6 +33,7 @@ import com.choucheng.dongzhibot.bean.MerchantInfoBean;
 import com.choucheng.dongzhibot.bean.UploadBean;
 import com.choucheng.dongzhibot.modle.DongZhiModle;
 import com.choucheng.dongzhibot.utils.PermissionUtil;
+import com.choucheng.dongzhibot.utils.ShowPictureDialog;
 import com.choucheng.dongzhibot.view.DialogUtil;
 import com.vondear.rxtool.view.RxToast;
 
@@ -355,6 +356,8 @@ public class MerchantInfoCollectActivity extends BaseActivity {
             protected void convertView(int position, View item, String s) {
                 if (position == others.size() - 1) {
                     Glide.with(MerchantInfoCollectActivity.this).asBitmap().load(R.mipmap.add_image).into(((ImageView) CommonViewHolder.get(item, R.id.image)));
+                }else {
+//
                 }
             }
         });
@@ -397,6 +400,8 @@ public class MerchantInfoCollectActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == others.size() - 1) {
                     openGallery(new ArrayList<String>(), 2, true, REQUEST_OTHERS);
+                }else {
+                    new ShowPictureDialog().showPicture(MerchantInfoCollectActivity.this, others.get(i));
                 }
             }
         });
@@ -406,6 +411,8 @@ public class MerchantInfoCollectActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == banks.size() - 1) {
                     openGallery(new ArrayList<String>(), 2, true, REQUEST_BANK);
+                }else {
+                    new ShowPictureDialog().showPicture(MerchantInfoCollectActivity.this, banks.get(i));
                 }
             }
         });
@@ -415,6 +422,8 @@ public class MerchantInfoCollectActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == legals.size() - 1) {
                     openGallery(new ArrayList<String>(), 2, true, REQUEST_LEGAL);
+                }else {
+                    new ShowPictureDialog().showPicture(MerchantInfoCollectActivity.this, legals.get(i));
                 }
             }
         });
