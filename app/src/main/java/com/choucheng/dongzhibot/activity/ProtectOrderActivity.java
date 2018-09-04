@@ -68,7 +68,7 @@ public class ProtectOrderActivity extends BaseActivity {
             }
 
             @Override
-            public void bindData(RecyclerViewHolder holder, int position, final ProtectOrderBean.ProtectOrder.ProtectOrderItem item) {
+            public void bindData(RecyclerViewHolder holder, final int position, final ProtectOrderBean.ProtectOrder.ProtectOrderItem item) {
                 if (null != item.merchant_info) {
                     holder.setText(R.id.name, "商户名称：" + item.merchant_info.name);
                     holder.setText(R.id.address, "地址：" + item.merchant_info.address);
@@ -86,22 +86,21 @@ public class ProtectOrderActivity extends BaseActivity {
 
                         @Override
                         public void onClick(View v) {
-                            if (isClose) {
-                                return;
-                            }
+                            Log.e("123456789", "bindData: ================" + position);
                             new DialogUtil().getGongDanDialog(mActivity, item.merchant_info.address, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    isAccept(item.d_id);
+                                    isAccept(item.d_id, item.id);
                                     getData();
                                 }
                             }, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    isCancel(item.d_id);
+                                    isCancel(item.d_id, item.id);
                                     getData();
                                 }
                             });
+                            adapterRV.notifyDataSetChanged();
                         }
                     });
                 } else if ("0".equals(item.yunwei_status)) {
@@ -132,7 +131,9 @@ public class ProtectOrderActivity extends BaseActivity {
         ((BaseRecyclerAdapter) adapterRV).setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, final int i) {
+                Log.e("123456789", "onItemClick: ================" + i);
                 if (datas.get(i).yunwei_over.equals("1")) {
+
                     Intent intent = new Intent(mActivity, ProtectOrderInfoActivity.class);
 
                     intent.putExtra("d_id", datas.get(i).d_id);
@@ -142,24 +143,21 @@ public class ProtectOrderActivity extends BaseActivity {
                 } else if (datas.get(i).yunwei_over.equals("2")) {
                     RxToast.normal("您已拒绝无法查看工单");
                 } else {
-                    if (isClose) {
-                        return;
-                    }
 //                    isCancel(datas.get(i).d_id, status);
                     new DialogUtil().getGongDanDialog(mActivity, datas.get(i).merchant_info.address, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            isAccept(datas.get(i).d_id);
+                            isAccept(datas.get(i).d_id, datas.get(i).id);
                             getData();
                         }
                     }, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            isCancel(datas.get(i).d_id);
+                            isCancel(datas.get(i).d_id, datas.get(i).id);
                             getData();
                         }
                     });
-
+                    adapterRV.notifyDataSetChanged();
                 }
 
             }
@@ -167,8 +165,8 @@ public class ProtectOrderActivity extends BaseActivity {
     }
 
     //同意
-    private void isAccept(String d_id) {
-        DongZhiModle.protectOrderAccept(d_id, "1", new HttpCallBack<String>() {
+    private void isAccept(String d_id, String id) {
+        DongZhiModle.protectOrderAccept(d_id, "1", id, new HttpCallBack<String>() {
             @Override
             public void success(String s) {
                 Toast.makeText(ProtectOrderActivity.this, "接受成功", Toast.LENGTH_SHORT).show();
@@ -178,23 +176,24 @@ public class ProtectOrderActivity extends BaseActivity {
             @Override
             public void fail(String errorStr) {
                 Toast.makeText(ProtectOrderActivity.this, "接受失败", Toast.LENGTH_SHORT).show();
+                isClose = true;
             }
         });
     }
 
     //拒绝
-    private void isCancel(String d_id) {
-        DongZhiModle.protectOrderAccept(d_id, "2", new HttpCallBack<String>() {
+    private void isCancel(String d_id, String id) {
+        DongZhiModle.protectOrderAccept(d_id, "2", id, new HttpCallBack<String>() {
             @Override
             public void success(String s) {
                 Toast.makeText(ProtectOrderActivity.this, "拒绝成功", Toast.LENGTH_SHORT).show();
-                isClose = false;
+                isClose = true;
             }
 
             @Override
             public void fail(String errorStr) {
                 Toast.makeText(ProtectOrderActivity.this, "拒绝失败", Toast.LENGTH_SHORT).show();
-
+                isClose = true;
             }
         });
     }

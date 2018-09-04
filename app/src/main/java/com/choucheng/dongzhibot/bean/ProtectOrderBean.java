@@ -16,6 +16,7 @@ public class ProtectOrderBean extends BaseBean<ProtectOrderBean.ProtectOrder> {
             public String xunjianid;//查询id1
             public String merchant_id;//查询id2
             public String yunwei_id;//
+            public String id;//
             public String yunwei_status;//0未审核 1审核中 2审核成功 3审核失败
             public String yunwei_over;//0未接受1已接受2拒绝接受3装机中4装机完成
             public String odd_number;
@@ -27,6 +28,7 @@ public class ProtectOrderBean extends BaseBean<ProtectOrderBean.ProtectOrder> {
             public String status;
             public MerchantInfo merchant_info;
             public String yunwei_info;
+
             public class MerchantInfo {
                 public String name;
                 public String address;

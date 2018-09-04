@@ -118,6 +118,7 @@ public class InstallOrderActivity extends BaseActivity {
                                         isCancel(installOrderItem.merchant_id, installOrderItem.device_id, status);
                                     }
                                 });
+                                adapter.notifyDataSetChanged();
                             }
                         });
                     } else {//is_over ==1

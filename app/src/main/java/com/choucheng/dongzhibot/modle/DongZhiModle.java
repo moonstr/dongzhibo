@@ -782,11 +782,12 @@ public class DongZhiModle {
      *
      * @param callBack
      */
-    public static void protectOrderAccept(String device_id, String yunwei_over, final HttpCallBack<String> callBack) {
+    public static void protectOrderAccept(String device_id, String yunwei_over, String id, final HttpCallBack<String> callBack) {
         String url = baseUrl + "/index.php?s=/api/Yunweilists/accept";
         Map<String, String> map = new HashMap<>();
         map.put("ucode", (String) SPUtils.get(Constants.KEY_UCODE, ""));
         map.put("device_id", device_id);
+        map.put("id", id);
         map.put("yunwei_over", yunwei_over);//0未接受1已接受2拒绝接受3装机中4装机完成
         OkHttpUtils.postForm(url, map, new HttpCallBack<String>() {
             @Override
