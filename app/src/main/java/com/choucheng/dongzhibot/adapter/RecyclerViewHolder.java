@@ -92,6 +92,8 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+
+
     public RecyclerViewHolder setVisibility(int viewId, int isShow) {
         View view = findViewById(viewId);
         switch (isShow) {

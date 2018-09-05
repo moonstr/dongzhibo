@@ -255,9 +255,10 @@ public class MerchantInfoCollectActivity extends BaseActivity {
                         }
                         mStyle.setText(merchantInfo.buss_cate);
                         mProtocolNumber.setText(merchantInfo.assign_no);
-                        if ("1".equals(merchantInfo.buss_type)) {
+                        mNote.setText(merchantInfo.mark);
+                        if ("1".equals(merchantInfo.buss_forward)) {
                             mRbTrend.setChecked(true);
-                        } else if ("2".equals(merchantInfo.buss_type)) {
+                        } else if ("2".equals(merchantInfo.buss_forward)) {
                             mRbReserve.setChecked(true);
                         }
                         if (!TextUtils.isEmpty(merchantInfo.top_photo)) {
@@ -356,7 +357,7 @@ public class MerchantInfoCollectActivity extends BaseActivity {
             protected void convertView(int position, View item, String s) {
                 if (position == others.size() - 1) {
                     Glide.with(MerchantInfoCollectActivity.this).asBitmap().load(R.mipmap.add_image).into(((ImageView) CommonViewHolder.get(item, R.id.image)));
-                }else {
+                } else {
 //
                 }
             }
@@ -400,7 +401,7 @@ public class MerchantInfoCollectActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == others.size() - 1) {
                     openGallery(new ArrayList<String>(), 2, true, REQUEST_OTHERS);
-                }else {
+                } else {
                     new ShowPictureDialog().showPicture(MerchantInfoCollectActivity.this, others.get(i));
                 }
             }
@@ -411,7 +412,7 @@ public class MerchantInfoCollectActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == banks.size() - 1) {
                     openGallery(new ArrayList<String>(), 2, true, REQUEST_BANK);
-                }else {
+                } else {
                     new ShowPictureDialog().showPicture(MerchantInfoCollectActivity.this, banks.get(i));
                 }
             }
@@ -422,7 +423,7 @@ public class MerchantInfoCollectActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == legals.size() - 1) {
                     openGallery(new ArrayList<String>(), 2, true, REQUEST_LEGAL);
-                }else {
+                } else {
                     new ShowPictureDialog().showPicture(MerchantInfoCollectActivity.this, legals.get(i));
                 }
             }
@@ -849,105 +850,89 @@ public class MerchantInfoCollectActivity extends BaseActivity {
 
 
     public void commitData(final boolean isCommit) {
-        String name = mName.getText().toString().trim();
-        String address = mAddress.getText().toString().trim();
-        String leglePhone = mLegalPhone.getText().toString().trim();
-        String legleNumber = mDocumentNumber.getText().toString().trim();
-        String registName = mRegistName.getText().toString().trim();
-        String registNumber = mRegistNumber.getText().toString().trim();
-        String registAddress = mRegistAddress.getText().toString().trim();
-        String contacts = mContacts.getText().toString().trim();
-        String contactsPhone = mContactsPhone.getText().toString().trim();
-        String typeStr = type;
-        String style = mStyle.getText().toString().trim();
-        String protocolNumber = mProtocolNumber.getText().toString().trim();
-        String trendStr = trend;
-        String note = mNote.getText().toString().trim();
-//        if (TextUtils.isEmpty(name)) {
-//            showToast("请填写商户名称");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(address)) {
-//            showToast("请填写营业地址");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(leglePhone)) {
-//            showToast("请填写联系电话");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(legleNumber)) {
-//            showToast("请填写法人证件号码");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(registName)) {
-//            showToast("请填写注册名称");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(registNumber)) {
-//            showToast("请填写注册编号");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(registAddress)) {
-//            showToast("请填写注册地址");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(contacts)) {
-//            showToast("请填写网点联系人");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(contactsPhone)) {
-//            showToast("请填写电话号码");
-//            return;
-//        }
-////        if (TextUtils.isEmpty(name)){
-////            showToast("请填写商户名称");
-////            return;
-////        }
-////        if (TextUtils.isEmpty(name)){
-////            showToast("请填写商户名称");
-////            return;
-////        }
-//        if (TextUtils.isEmpty(style)) {
-//            showToast("请填写行业类别");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(protocolNumber)) {
-//            showToast("请填写协议编号");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(note)) {
-//            showToast("请填写备注信息");
-//            return;
-//        }
-//        if (heads.size() < 1) {
-//            showToast("请上传门头图片");
-//            return;
-//        }
-//        if (fronts.size() < 1) {
-//            showToast("请上传前台图片");
-//            return;
-//        }
-//        if (inners.size() < 1) {
-//            showToast("请上传店内图片");
-//            return;
-//        }
-//        if (businesss.size() < 1) {
-//            showToast("请上传营业执照图片");
-//            return;
-//        }
-//
-//        if (legals.size() < 3) {
-//            showToast("请上传身份证正反照");
-//            return;
-//        }
-//        if (banks.size() < 3) {
-//            showToast("请上传银行卡正反照");
-//            return;
-//        }
-//        if (others.size() < 3) {
-//            showToast("请上传2张其他照片");
-//            return;
-//        }
+        String name;
+        String address;
+        String leglePhone;
+        String legleNumber;
+        String registName;
+        String registNumber;
+        String registAddress;
+        String contacts;
+        String contactsPhone;
+        String typeStr;
+        String style;
+        String protocolNumber;
+        String trendStr;
+        String note;
+        if (!TextUtils.isEmpty(mName.getText().toString().trim())) {
+            name = mName.getText().toString().trim();
+        } else {
+            name = merchantInfo.name;
+        }
+
+
+        if (!TextUtils.isEmpty(mAddress.getText().toString().trim())) {
+            address = mAddress.getText().toString().trim();
+        } else {
+            address = merchantInfo.address;
+        }
+        if (!TextUtils.isEmpty(mLegalPhone.getText().toString().trim())) {
+            leglePhone = mLegalPhone.getText().toString().trim();
+        } else {
+            leglePhone = merchantInfo.tel;
+        }
+        if (!TextUtils.isEmpty(mDocumentNumber.getText().toString().trim())) {
+            legleNumber = mDocumentNumber.getText().toString().trim();
+        } else {
+            legleNumber = merchantInfo.port;
+        }
+        if (!TextUtils.isEmpty(mRegistName.getText().toString().trim())) {
+            registName = mRegistName.getText().toString().trim();
+        } else {
+            registName = merchantInfo.reg_name;
+        }
+        if (!TextUtils.isEmpty(mRegistNumber.getText().toString().trim())) {
+            registNumber = mRegistNumber.getText().toString().trim();
+        } else {
+            registNumber = merchantInfo.reg_no;
+        }
+        if (!TextUtils.isEmpty(mRegistAddress.getText().toString().trim())) {
+            registAddress = mRegistAddress.getText().toString().trim();
+        } else {
+            registAddress = merchantInfo.reg_address;
+        }
+        if (!TextUtils.isEmpty(mContacts.getText().toString().trim())) {
+            contacts = mContacts.getText().toString().trim();
+        } else {
+            contacts = merchantInfo.link_name;
+        }
+        if (!TextUtils.isEmpty(mContactsPhone.getText().toString().trim())) {
+            contactsPhone = mContactsPhone.getText().toString().trim();
+        } else {
+            contactsPhone = merchantInfo.link_phone;
+        }
+        if (!TextUtils.isEmpty(mStyle.getText().toString().trim())) {
+            style = mStyle.getText().toString().trim();
+        } else {
+            style = merchantInfo.buss_cate;
+        }
+
+        typeStr = type;
+
+        if (!TextUtils.isEmpty(mProtocolNumber.getText().toString().trim())) {
+            protocolNumber = mProtocolNumber.getText().toString().trim();
+        } else {
+            protocolNumber = merchantInfo.assign_no;
+        }
+
+        trendStr = trend;
+
+        if (!TextUtils.isEmpty(mNote.getText().toString().trim())) {
+            note = mNote.getText().toString().trim();
+        } else {
+            note = merchantInfo.mark;
+        }
+
 
         DongZhiModle.addMerchantInfo(isAdd, name, id, address, leglePhone, legleNumber, registName, registNumber, registAddress, contacts, contactsPhone, style,
                 typeStr, protocolNumber, trendStr, note, headUrl, frontUrl, innerUrl, businesUrl, legalUrl, bankUrl, otherUrl, new HttpCallBack<String>() {

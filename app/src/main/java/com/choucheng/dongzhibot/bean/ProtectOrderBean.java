@@ -34,7 +34,27 @@ public class ProtectOrderBean extends BaseBean<ProtectOrderBean.ProtectOrder> {
                 public String address;
             }
 
-//  "xunjianid": "1",        巡检的id
+            @Override
+            public String toString() {
+                return "ProtectOrderItem{" +
+                        "xunjianid='" + xunjianid + '\'' +
+                        ", merchant_id='" + merchant_id + '\'' +
+                        ", yunwei_id='" + yunwei_id + '\'' +
+                        ", id='" + id + '\'' +
+                        ", yunwei_status='" + yunwei_status + '\'' +
+                        ", yunwei_over='" + yunwei_over + '\'' +
+                        ", odd_number='" + odd_number + '\'' +
+                        ", d_id='" + d_id + '\'' +
+                        ", start_time='" + start_time + '\'' +
+                        ", end_time='" + end_time + '\'' +
+                        ", is_question='" + is_question + '\'' +
+                        ", x_status='" + x_status + '\'' +
+                        ", status='" + status + '\'' +
+                        ", merchant_info=" + merchant_info +
+                        ", yunwei_info='" + yunwei_info + '\'' +
+                        '}';
+            }
+            //  "xunjianid": "1",        巡检的id
 //                "merchant_id": "1",   商户id
 //                "yunwei_id": "114",     维护人员的id
 //                "yunwei_status": "0",  0未审核1审核中 2审核通过 3审核未通过

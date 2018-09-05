@@ -87,6 +87,7 @@ public class ProtectOrderInfoActivity extends BaseActivity implements View.OnLon
 
     private String xunjianid = "";
     private String d_id = "";
+    private String id = "";
     private String odd_number = "";
     private CommonAdapter adapter;
     ArrayList<String> photos = new ArrayList<>();
@@ -109,6 +110,7 @@ public class ProtectOrderInfoActivity extends BaseActivity implements View.OnLon
         super.initData();
         Intent intent = getIntent();
         xunjianid = intent.getStringExtra("xunjianid");
+        id = intent.getStringExtra("id");
         d_id = intent.getStringExtra("d_id");
         isOK = intent.getBooleanExtra("isOk", false);
         if (isOK) {
@@ -278,7 +280,7 @@ public class ProtectOrderInfoActivity extends BaseActivity implements View.OnLon
                     // http://dzb2.zgcom.cn/Public/common/file/image/2018-08-07/8715b6961138830f5b69611389b38.jpg
                     //http://dzb2.zgcom.cn/Public/common/file/image/2018-08-07/3585b69613c041185b69613c05925.jpg
                     // http://dzb2.zgcom.cn/Public/common/file/image/2018-08-07/3975b696165c9e925b696165cb6e7.jpg
-                    DongZhiModle.commitProtectInfo(odd_number, txt, strs, new HttpCallBack<String>() {
+                    DongZhiModle.commitProtectInfo(id, odd_number, txt, strs, new HttpCallBack<String>() {
                         @Override
                         public void success(String o) {
                             RxToast.normal("提交审核成功");

@@ -213,8 +213,13 @@ public class ErrorListActivity extends BaseActivity {
 
     String strs = "";
 
+    boolean isNeedWait = false;
+
     @OnClick(R.id.commit)
     public void onViewClicked() {
+        if (isNeedWait) {
+            return;
+        }
         for (int i = 0; i < urls.size(); i++) {
             if (i != (urls.size() - 1)) {
                 strs += urls.get(i) + ",";
@@ -240,6 +245,7 @@ public class ErrorListActivity extends BaseActivity {
     }
 
     private void upDateAll(String strs) {
+        isNeedWait = true;
         DongZhiModle.addError(device_id, mark_id, question, strs, new HttpCallBack<String>() {
             @Override
             public void success(String o) {
@@ -247,12 +253,13 @@ public class ErrorListActivity extends BaseActivity {
                 Message msg = new Message();
                 msg.what = 2;
                 handler.sendMessage(msg);
-
+                isNeedWait = false;
             }
 
             @Override
             public void fail(String errorStr) {
                 RxToast.normal(errorStr);
+                isNeedWait = false;
             }
         });
     }

@@ -203,6 +203,7 @@ public class ProtectOrderFragment extends Fragment {
                     return;
                 }
                 Intent intent = new Intent(getActivity(), ProtectOrderInfoActivity.class);
+                intent.putExtra("id", data.get(pos).id);
                 intent.putExtra("d_id", data.get(pos).d_id);
                 intent.putExtra("xunjianid", data.get(pos).xunjianid);
                 intent.putExtra("isOk", true);

@@ -848,12 +848,13 @@ public class DongZhiModle {
      *
      * @param callBack
      */
-    public static void commitProtectInfo(String odd_number, String solve_mark, String files, final HttpCallBack<String> callBack) {
+    public static void commitProtectInfo(String id, String odd_number, String solve_mark, String files, final HttpCallBack<String> callBack) {
         String url = baseUrl + "/index.php?s=/api/Yunweiadd/start";
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         builder.addFormDataPart("ucode", (String) SPUtils.get(Constants.KEY_UCODE, ""));
         builder.addFormDataPart("odd_number", odd_number);
         builder.addFormDataPart("solve_mark", solve_mark);
+        builder.addFormDataPart("id", id);
         builder.addFormDataPart("photos", files);
 //        for (int i =0;i<fils.size();i++){
 //            String path = fils.get(i);

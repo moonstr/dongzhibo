@@ -3,11 +3,14 @@ package com.choucheng.dongzhibot.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,10 +54,10 @@ public class ProtectOrderActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        getData();
+
     }
 
-    private boolean isEnter = false;
+    private boolean isEnter = true;
     private boolean isEnter2 = false;
     private boolean isClose = false;//控制监听是否生效
 
@@ -68,7 +71,7 @@ public class ProtectOrderActivity extends BaseActivity {
             }
 
             @Override
-            public void bindData(RecyclerViewHolder holder, final int position, final ProtectOrderBean.ProtectOrder.ProtectOrderItem item) {
+            public void bindData(final RecyclerViewHolder holder, final int position, final ProtectOrderBean.ProtectOrder.ProtectOrderItem item) {
                 if (null != item.merchant_info) {
                     holder.setText(R.id.name, "商户名称：" + item.merchant_info.name);
                     holder.setText(R.id.address, "地址：" + item.merchant_info.address);
@@ -78,31 +81,20 @@ public class ProtectOrderActivity extends BaseActivity {
                 }
                 final TextView status = (TextView) holder.itemView.findViewById(R.id.status);
                 RCRelativeLayout status_bg = (RCRelativeLayout) holder.itemView.findViewById(R.id.status_bg);
-                if ("0".equals(item.yunwei_over)) {
-                    holder.setText(R.id.status, "待受理");
+                if ("0".equals(item.yunwei_over) && "0".equals(item.yunwei_status)) {
+                    holder.setText(R.id.status, "待受理");//xunjianid='4240', merchant_id='15768', yunwei_id='', id='650', yunwei_status='0', yunwei_over='0',
                     holder.setTextColor(R.id.status, R.color.main_green);
                     status_bg.setStrokeColor(mActivity.getResources().getColor(R.color.main_green));
-                    holder.setClickListener(R.id.status, new View.OnClickListener() {
-
+                    status.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Log.e("123456789", "bindData: ================" + position);
-                            new DialogUtil().getGongDanDialog(mActivity, item.merchant_info.address, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    isAccept(item.d_id, item.id);
-                                    getData();
-                                }
-                            }, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    isCancel(item.d_id, item.id);
-                                    getData();
-                                }
-                            });
-                            adapterRV.notifyDataSetChanged();
+                            status.setEnabled(false);
+                            dialog(item.merchant_info.address, item.d_id, item.id);
+
                         }
                     });
+
+
                 } else if ("0".equals(item.yunwei_status)) {
                     status.setText("受理中");
                     status.setTextColor(mActivity.getResources().getColor(R.color.main_yellow));
@@ -131,37 +123,55 @@ public class ProtectOrderActivity extends BaseActivity {
         ((BaseRecyclerAdapter) adapterRV).setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, final int i) {
+                Log.e("123456789", "onClick: " + datas.get(i).toString());
                 Log.e("123456789", "onItemClick: ================" + i);
                 if (datas.get(i).yunwei_over.equals("1")) {
 
                     Intent intent = new Intent(mActivity, ProtectOrderInfoActivity.class);
-
+                    intent.putExtra("id", datas.get(i).id);
                     intent.putExtra("d_id", datas.get(i).d_id);
                     intent.putExtra("xunjianid", datas.get(i).xunjianid);
                     intent.putExtra("isOk", false);
                     startActivityForResult(intent, 1);
                 } else if (datas.get(i).yunwei_over.equals("2")) {
                     RxToast.normal("您已拒绝无法查看工单");
-                } else {
+                } else if (datas.get(i).yunwei_over.equals("0") && datas.get(i).yunwei_status.equals("0")) {
 //                    isCancel(datas.get(i).d_id, status);
-                    new DialogUtil().getGongDanDialog(mActivity, datas.get(i).merchant_info.address, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            isAccept(datas.get(i).d_id, datas.get(i).id);
-                            getData();
-                        }
-                    }, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            isCancel(datas.get(i).d_id, datas.get(i).id);
-                            getData();
-                        }
-                    });
-                    adapterRV.notifyDataSetChanged();
+                    dialog(datas.get(i).merchant_info.address, datas.get(i).d_id, datas.get(i).id);
                 }
 
             }
         });
+        getData();
+    }
+
+    private void dialog(String content, final String d_id, final String id) {
+        final Dialog dialog = new Dialog(this, R.style.selectPhotoDialog);
+        dialog.setContentView(R.layout.dialog_accept_order);
+        Window window = dialog.getWindow();
+        window.getDecorView().setPadding(0, 0, 0, 0);
+        dialog.show();
+        TextView mAccept = dialog.findViewById(R.id.accept);
+        final TextView mRefuse = dialog.findViewById(R.id.refuse);
+        TextView mContent = dialog.findViewById(R.id.content);
+        mAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                isAccept(d_id, id);
+//                datas.get(i).yunwei_over = "1";
+                dialog.dismiss();
+            }
+        });
+        mRefuse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isCancel(d_id, id);
+                dialog.dismiss();
+
+            }
+        });
+        mContent.setText(content);
     }
 
     //同意
@@ -170,6 +180,11 @@ public class ProtectOrderActivity extends BaseActivity {
             @Override
             public void success(String s) {
                 Toast.makeText(ProtectOrderActivity.this, "接受成功", Toast.LENGTH_SHORT).show();
+                getData();
+                Message msg = new Message();
+                msg.what = 2;
+                handler.sendMessage(msg);
+
                 isClose = true;
             }
 
@@ -187,6 +202,10 @@ public class ProtectOrderActivity extends BaseActivity {
             @Override
             public void success(String s) {
                 Toast.makeText(ProtectOrderActivity.this, "拒绝成功", Toast.LENGTH_SHORT).show();
+                getData();
+                Message msg = new Message();
+                msg.what = 2;
+                handler.sendMessage(msg);
                 isClose = true;
             }
 
@@ -214,7 +233,10 @@ public class ProtectOrderActivity extends BaseActivity {
                         datas.add(installOrderItems.get(i));
                     }
                 }
-                adapterRV.notifyDataSetChanged();
+                Message msg = new Message();
+                msg.what = 1;
+                handler.sendMessage(msg);
+
             }
 
             @Override
@@ -222,6 +244,28 @@ public class ProtectOrderActivity extends BaseActivity {
                 getData();
             }
         });
+    }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    adapterRV.notifyDataSetChanged();
+                    break;
+
+                case 2:
+                    isEnter = true;
+                    break;
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
     }
 
     @Override

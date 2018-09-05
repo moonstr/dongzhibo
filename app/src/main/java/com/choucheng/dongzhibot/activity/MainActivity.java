@@ -29,6 +29,7 @@ import com.choucheng.dongzhibot.bean.MainBean;
 import com.choucheng.dongzhibot.bean.ProtectOrderBean;
 import com.choucheng.dongzhibot.fragment.HintDialogFragment;
 import com.choucheng.dongzhibot.modle.DongZhiModle;
+import com.choucheng.dongzhibot.utils.GetIP;
 import com.choucheng.dongzhibot.utils.LocationListeners;
 import com.choucheng.dongzhibot.utils.LocationUtil;
 import com.choucheng.dongzhibot.view.DialogUtil;
@@ -87,6 +88,7 @@ public class MainActivity extends BaseActivity implements LocationListeners, Hin
 
     @Override
     public void initView() {
+
 //        checkLocationPermission();
         login();
         checkStoragePermission();
