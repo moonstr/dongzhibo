@@ -3,7 +3,9 @@ package com.choucheng.dongzhibot.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,16 +14,20 @@ import android.widget.Toast;
 
 import com.bjkj.library.okhttp.HttpCallBack;
 import com.choucheng.dongzhibot.R;
+import com.choucheng.dongzhibot.adapter.BaseRecyclerAdapter;
 import com.choucheng.dongzhibot.adapter.CommonAdapter;
 import com.choucheng.dongzhibot.adapter.CommonViewHolder;
+import com.choucheng.dongzhibot.adapter.RecyclerViewHolder;
 import com.choucheng.dongzhibot.base.BaseActivity;
 import com.choucheng.dongzhibot.bean.InstallOrderBean;
+import com.choucheng.dongzhibot.bean.PageBean;
 import com.choucheng.dongzhibot.modle.DongZhiModle;
 import com.choucheng.dongzhibot.view.DialogUtil;
 import com.choucheng.dongzhibot.view.RCRelativeLayout;
 import com.vondear.rxtool.view.RxToast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,8 +42,12 @@ public class InstallOrderActivity extends BaseActivity {
     ListView listView;
     ArrayList<InstallOrderBean.InstallOrder.InstallOrderItem> datas = new ArrayList();
     CommonAdapter adapter;
+    @Bind(R.id.rv_install_page)
+    RecyclerView rvInstallPage;
     private boolean isUser = false;
     private boolean isEnter = false;
+    private BaseRecyclerAdapter baseRecyclerAdapter;
+    private List<PageBean> pageList = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -46,41 +56,42 @@ public class InstallOrderActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        baseRecyclerAdapter = new BaseRecyclerAdapter<PageBean>(this, pageList) {
+            @Override
+            public int getItemLayoutId(int viewType) {
+                return R.layout.item_page_tv;
+            }
+
+            @Override
+            public void bindData(RecyclerViewHolder holder, int position, PageBean item) {
+                holder.setText(R.id.tv_item_page, item.getPage());
+                if (item.isChecked()) {
+                    holder.setBackground(R.id.tv_item_page, R.color.colorAccent);
+                } else {
+                    holder.setBackground(R.id.tv_item_page, R.color.white);
+                }
+            }
+        };
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvInstallPage.setLayoutManager(layoutManager);
+        rvInstallPage.setAdapter(baseRecyclerAdapter);
+        ((BaseRecyclerAdapter) baseRecyclerAdapter).setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int pos) {
+                for (int i = 0; i < pageList.size(); i++) {
+                    pageList.get(i).setChecked(false);
+                }
+                pageList.get(pos).setChecked(true);
+                baseRecyclerAdapter.notifyDataSetChanged();
+            }
+        });
 
     }
 
     @Override
     public void initData() {
         super.initData();
-//        InstallOrderBean.InstallOrder.InstallOrderItem item1=new InstallOrderBean.InstallOrder.InstallOrderItem();
-//        item1.name="账号1";
-//        item1.address="武汉市江夏区";
-//        item1.status="0";
-//
-//        InstallOrderBean.InstallOrder.InstallOrderItem item2=new InstallOrderBean.InstallOrder.InstallOrderItem();
-//        item2.name="账号2";
-//        item2.address="武汉市江夏区";
-//        item2.status="1";
-//
-//        InstallOrderBean.InstallOrder.InstallOrderItem item3=new InstallOrderBean.InstallOrder.InstallOrderItem();
-//        item3.name="账号3";
-//        item3.address="武汉市江夏区";
-//        item3.status="2";
-//
-//        InstallOrderBean.InstallOrder.InstallOrderItem item4=new InstallOrderBean.InstallOrder.InstallOrderItem();
-//        item4.name="账号4";
-//        item4.address="武汉市江夏区";
-//        item4.status="3";
-//
-//        InstallOrderBean.InstallOrder.InstallOrderItem item5=new InstallOrderBean.InstallOrder.InstallOrderItem();
-//        item5.name="账号5";
-//        item5.address="武汉市江夏区";
-//        item5.status="4";
-//        datas.add(item1);
-//        datas.add(item2);
-//        datas.add(item3);
-//        datas.add(item4);
-//        datas.add(item5);
         adapter = new CommonAdapter<InstallOrderBean.InstallOrder.InstallOrderItem>(mActivity, datas, R.layout.item_install_order) {
             @Override
             protected void convertView(int position, View item, final InstallOrderBean.InstallOrder.InstallOrderItem installOrderItem) {
@@ -199,16 +210,23 @@ public class InstallOrderActivity extends BaseActivity {
         }
     }
 
+    private InstallOrderBean.InstallOrder.InstallOrderPaging paging = null;
+
     private void getData() {
-        DongZhiModle.installOrder(new HttpCallBack<ArrayList<InstallOrderBean.InstallOrder.InstallOrderItem>>() {
+        DongZhiModle.installOrder(new HttpCallBack<InstallOrderBean.InstallOrder>() {
             @Override
-            public void success(ArrayList<InstallOrderBean.InstallOrder.InstallOrderItem> installOrderItems) {
-                datas.clear();
-                for (int i = 0; i < installOrderItems.size(); i++) {
-                    if (!installOrderItems.get(i).status.equals("2") && !"2".equals(installOrderItems.get(i).is_over)) {
-                        datas.add(installOrderItems.get(i));
+            public void success(InstallOrderBean.InstallOrder installOrderItems) {
+                if (installOrderItems != null) {
+                    datas.clear();
+                    paging = installOrderItems.paging;
+                    List<InstallOrderBean.InstallOrder.InstallOrderItem> list = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++) {
+                        if (!list.get(i).status.equals("2") && !"2".equals(list.get(i).is_over)) {
+                            datas.add(list.get(i));
+                        }
                     }
                 }
+                
                 adapter.notifyDataSetChanged();
             }
 
@@ -252,5 +270,12 @@ public class InstallOrderActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

@@ -29,6 +29,7 @@ import com.choucheng.dongzhibot.view.RCRelativeLayout;
 import com.vondear.rxtool.view.RxToast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -223,19 +224,27 @@ public class ProtectOrderActivity extends BaseActivity {
 
     }
 
+    private ProtectOrderBean.ProtectOrder.ProtectOrderPaging paging = null;
+
     private void getData() {
-        DongZhiModle.protectOrder(new HttpCallBack<ArrayList<ProtectOrderBean.ProtectOrder.ProtectOrderItem>>() {
+        DongZhiModle.protectOrder(new HttpCallBack<ProtectOrderBean.ProtectOrder>() {
             @Override
-            public void success(ArrayList<ProtectOrderBean.ProtectOrder.ProtectOrderItem> installOrderItems) {
-                datas.clear();
-                for (int i = 0; i < installOrderItems.size(); i++) {
-                    if (!installOrderItems.get(i).yunwei_status.equals("2") && !("2").equals(installOrderItems.get(i).yunwei_over)) {
-                        datas.add(installOrderItems.get(i));
+            public void success(ProtectOrderBean.ProtectOrder installOrderItems) {
+                if (installOrderItems != null) {
+                    datas.clear();
+                    paging = installOrderItems.paging;
+                    List<ProtectOrderBean.ProtectOrder.ProtectOrderItem> list = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++) {
+                        if (!list.get(i).yunwei_status.equals("2") && !("2").equals(list.get(i).yunwei_over)) {
+                            datas.add(list.get(i));
+                        }
                     }
+                    Message msg = new Message();
+                    msg.what = 1;
+                    handler.sendMessage(msg);
+                } else {
+                    RxToast.normal("没有数据");
                 }
-                Message msg = new Message();
-                msg.what = 1;
-                handler.sendMessage(msg);
 
             }
 

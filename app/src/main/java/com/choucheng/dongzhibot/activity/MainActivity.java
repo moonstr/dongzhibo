@@ -36,6 +36,7 @@ import com.choucheng.dongzhibot.view.DialogUtil;
 import com.vondear.rxtool.view.RxToast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -214,12 +215,13 @@ public class MainActivity extends BaseActivity implements LocationListeners, Hin
 
 
     private void getData() {
-        DongZhiModle.protectOrder(new HttpCallBack<ArrayList<ProtectOrderBean.ProtectOrder.ProtectOrderItem>>() {
+        DongZhiModle.protectOrder(new HttpCallBack<ProtectOrderBean.ProtectOrder>() {
             @Override
-            public void success(ArrayList<ProtectOrderBean.ProtectOrder.ProtectOrderItem> installOrderItems) {
+            public void success(ProtectOrderBean.ProtectOrder installOrderItems) {
                 int num = 0;
-                for (int i = 0; i < installOrderItems.size(); i++) {
-                    if (!installOrderItems.get(i).yunwei_status.equals("2") && !("2").equals(installOrderItems.get(i).yunwei_over)) {
+                List<ProtectOrderBean.ProtectOrder.ProtectOrderItem> list = new ArrayList<>();
+                for (int i = 0; i < list.size(); i++) {
+                    if (!list.get(i).yunwei_status.equals("2") && !("2").equals(list.get(i).yunwei_over)) {
                         num++;
                     }
                 }
@@ -251,12 +253,13 @@ public class MainActivity extends BaseActivity implements LocationListeners, Hin
     private int data2 = 0;
 
     private void getData2() {
-        DongZhiModle.installOrder(new HttpCallBack<ArrayList<InstallOrderBean.InstallOrder.InstallOrderItem>>() {
+        DongZhiModle.installOrder(new HttpCallBack<InstallOrderBean.InstallOrder>() {
             @Override
-            public void success(ArrayList<InstallOrderBean.InstallOrder.InstallOrderItem> installOrderItems) {
+            public void success(InstallOrderBean.InstallOrder installOrderItems) {
                 int num = 0;
-                for (int i = 0; i < installOrderItems.size(); i++) {
-                    if (!installOrderItems.get(i).status.equals("2") && !"2".equals(installOrderItems.get(i).is_over)) {
+                List<InstallOrderBean.InstallOrder.InstallOrderItem> list = new ArrayList<>();
+                for (int i = 0; i < list.size(); i++) {
+                    if (!list.get(i).status.equals("2") && !"2".equals(list.get(i).is_over)) {
                         num++;
                     }
                 }

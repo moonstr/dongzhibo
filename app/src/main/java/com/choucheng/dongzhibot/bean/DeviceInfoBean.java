@@ -20,6 +20,7 @@ public class DeviceInfoBean extends BaseBean<DeviceInfoBean.DeviceInfoData> {
         public String link_phone;
         public String link_name;
         public String merchant_no;
+        public String xunjian_time;
 
 
 // "pos_no": "44444", //设备编号

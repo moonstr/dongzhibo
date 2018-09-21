@@ -585,7 +585,7 @@ public class DongZhiModle {
      *
      * @param callBack
      */
-    public static void installOrder(final HttpCallBack<ArrayList<InstallOrderBean.InstallOrder.InstallOrderItem>> callBack) {
+    public static void installOrder(final HttpCallBack<InstallOrderBean.InstallOrder> callBack) {
         String url = baseUrl + "/index.php?s=/api/Zhuangji/my_lists";
         Map<String, String> map = new HashMap<>();
         map.put("ucode", (String) SPUtils.get(Constants.KEY_UCODE, ""));
@@ -595,7 +595,7 @@ public class DongZhiModle {
                 Gson gson = new Gson();
                 InstallOrderBean bean = gson.fromJson(s, InstallOrderBean.class);
                 if ("0".equals(bean.status.code)) {
-                    callBack.success(bean.data.zhuangji_lists);
+                    callBack.success(bean.data);
                 } else {
                     callBack.fail(bean.status.msg);
                 }
@@ -751,7 +751,7 @@ public class DongZhiModle {
      *
      * @param callBack
      */
-    public static void protectOrder(final HttpCallBack<ArrayList<ProtectOrderBean.ProtectOrder.ProtectOrderItem>> callBack) {
+    public static void protectOrder(final HttpCallBack<ProtectOrderBean.ProtectOrder> callBack) {
         String url = baseUrl + "/index.php?s=/api/Yunweilists/my_lists";
         Map<String, String> map = new HashMap<>();
         map.put("ucode", (String) SPUtils.get(Constants.KEY_UCODE, ""));
@@ -761,7 +761,7 @@ public class DongZhiModle {
                 Gson gson = new Gson();
                 ProtectOrderBean bean = gson.fromJson(s, ProtectOrderBean.class);
                 if ("0".equals(bean.status.code)) {
-                    callBack.success(bean.data.yunwei_lists);
+                    callBack.success(bean.data);
                 } else {
                     callBack.fail(bean.status.msg);
                 }
