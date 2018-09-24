@@ -3,7 +3,6 @@ package com.choucheng.dongzhibot.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -210,15 +209,38 @@ public class InstallOrderActivity extends BaseActivity {
         }
     }
 
+    private int allPage = 0;
     private InstallOrderBean.InstallOrder.InstallOrderPaging paging = null;
 
     private void getData() {
-        DongZhiModle.installOrder(new HttpCallBack<InstallOrderBean.InstallOrder>() {
+        DongZhiModle.installOrder(String.valueOf(1),new HttpCallBack<InstallOrderBean.InstallOrder>() {
             @Override
             public void success(InstallOrderBean.InstallOrder installOrderItems) {
                 if (installOrderItems != null) {
                     datas.clear();
-                    paging = installOrderItems.paging;
+                    if (paging == null) {
+                        paging = installOrderItems.paging;
+                        int allNum = Integer.parseInt(paging.totalcount);
+                        int nowPage = Integer.parseInt(paging.page);
+                        if (allNum != 0) {
+                            if (allNum % 10 == 0) {
+                                allPage = allNum / 10;
+                            } else {
+                                allPage = allNum / 10 + 1;
+                            }
+                            for (int i = 0; i < allPage; i++) {
+                                String thisPage = String.valueOf(i + 1);
+                                pageList.add(new PageBean(thisPage, false));
+                            }
+                            if (pageList.size() != 0) {
+                                pageList.get(0).setChecked(true);
+                                baseRecyclerAdapter.notifyDataSetChanged();
+                            }
+                        }
+                        // public String page;//页码
+                        //            public String totalcount;//总数
+                        //            public String numberofpage;//每页数量
+                    }
                     List<InstallOrderBean.InstallOrder.InstallOrderItem> list = new ArrayList<>();
                     for (int i = 0; i < list.size(); i++) {
                         if (!list.get(i).status.equals("2") && !"2".equals(list.get(i).is_over)) {
@@ -226,7 +248,7 @@ public class InstallOrderActivity extends BaseActivity {
                         }
                     }
                 }
-                
+
                 adapter.notifyDataSetChanged();
             }
 
