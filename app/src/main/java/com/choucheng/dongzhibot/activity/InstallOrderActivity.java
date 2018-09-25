@@ -226,7 +226,7 @@ public class InstallOrderActivity extends BaseActivity {
                         }
                     }
                 }
-                
+
                 adapter.notifyDataSetChanged();
             }
 
