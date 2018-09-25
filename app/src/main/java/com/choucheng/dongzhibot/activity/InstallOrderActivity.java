@@ -47,6 +47,7 @@ public class InstallOrderActivity extends BaseActivity {
     private boolean isEnter = false;
     private BaseRecyclerAdapter baseRecyclerAdapter;
     private List<PageBean> pageList = new ArrayList<>();
+    private int page = 1;
 
     @Override
     public int getLayoutId() {
@@ -82,6 +83,8 @@ public class InstallOrderActivity extends BaseActivity {
                     pageList.get(i).setChecked(false);
                 }
                 pageList.get(pos).setChecked(true);
+                page = pos + 1;
+                getData();
                 baseRecyclerAdapter.notifyDataSetChanged();
             }
         });
@@ -213,7 +216,7 @@ public class InstallOrderActivity extends BaseActivity {
     private InstallOrderBean.InstallOrder.InstallOrderPaging paging = null;
 
     private void getData() {
-        DongZhiModle.installOrder(String.valueOf(1),new HttpCallBack<InstallOrderBean.InstallOrder>() {
+        DongZhiModle.installOrder(String.valueOf(page), new HttpCallBack<InstallOrderBean.InstallOrder>() {
             @Override
             public void success(InstallOrderBean.InstallOrder installOrderItems) {
                 if (installOrderItems != null) {
@@ -242,6 +245,7 @@ public class InstallOrderActivity extends BaseActivity {
                         //            public String numberofpage;//每页数量
                     }
                     List<InstallOrderBean.InstallOrder.InstallOrderItem> list = new ArrayList<>();
+                    list = installOrderItems.zhuangji_lists;
                     for (int i = 0; i < list.size(); i++) {
                         if (!list.get(i).status.equals("2") && !"2".equals(list.get(i).is_over)) {
                             datas.add(list.get(i));

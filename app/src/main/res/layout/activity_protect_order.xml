@@ -20,8 +20,14 @@
     <!--android:dividerHeight="8dp"-->
     <!--android:divider="@color/app_bg"/>-->
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_protect_page"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x30"
+        android:layout_marginEnd="@dimen/x5"
+        android:layout_marginStart="@dimen/x5"></android.support.v7.widget.RecyclerView>
+
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 </LinearLayout>

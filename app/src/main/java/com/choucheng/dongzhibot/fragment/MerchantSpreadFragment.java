@@ -128,12 +128,7 @@ public class MerchantSpreadFragment extends Fragment {
 
             @Override
             public void bindData(RecyclerViewHolder holder, int position, PageBean item) {
-                holder.setText(R.id.tv_item_page, item.getPage());
-                if (item.isChecked()) {
-                    holder.setBackground(R.id.tv_item_page, R.color.colorAccent);
-                } else {
-                    holder.setBackground(R.id.tv_item_page, R.color.white);
-                }
+
             }
 
 

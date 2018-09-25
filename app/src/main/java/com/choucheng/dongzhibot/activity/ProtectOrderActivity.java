@@ -11,20 +11,17 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bjkj.library.okhttp.HttpCallBack;
 import com.choucheng.dongzhibot.R;
 import com.choucheng.dongzhibot.adapter.BaseRecyclerAdapter;
-import com.choucheng.dongzhibot.adapter.CommonAdapter;
-import com.choucheng.dongzhibot.adapter.CommonViewHolder;
 import com.choucheng.dongzhibot.adapter.RecyclerViewHolder;
 import com.choucheng.dongzhibot.base.BaseActivity;
+import com.choucheng.dongzhibot.bean.PageBean;
 import com.choucheng.dongzhibot.bean.ProtectOrderBean;
 import com.choucheng.dongzhibot.modle.DongZhiModle;
-import com.choucheng.dongzhibot.view.DialogUtil;
 import com.choucheng.dongzhibot.view.RCRelativeLayout;
 import com.vondear.rxtool.view.RxToast;
 
@@ -45,8 +42,12 @@ public class ProtectOrderActivity extends BaseActivity {
     ArrayList<ProtectOrderBean.ProtectOrder.ProtectOrderItem> datas = new ArrayList();
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
+    @Bind(R.id.rv_protect_page)
+    RecyclerView rvProtectPage;
     //    CommonAdapter adapter;
     private BaseRecyclerAdapter adapterRV;
+    private BaseRecyclerAdapter baseRecyclerAdapter;
+    private List<PageBean> pageList = new ArrayList<>();
 
     @Override
     public int getLayoutId() {
@@ -55,7 +56,38 @@ public class ProtectOrderActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        baseRecyclerAdapter = new BaseRecyclerAdapter<PageBean>(this, pageList) {
+            @Override
+            public int getItemLayoutId(int viewType) {
+                return R.layout.item_page_tv;
+            }
 
+            @Override
+            public void bindData(RecyclerViewHolder holder, int position, PageBean item) {
+                holder.setText(R.id.tv_item_page, item.getPage());
+                if (item.isChecked()) {
+                    holder.setBackground(R.id.tv_item_page, R.color.colorAccent);
+                } else {
+                    holder.setBackground(R.id.tv_item_page, R.color.white);
+                }
+            }
+        };
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvProtectPage.setLayoutManager(layoutManager);
+        rvProtectPage.setAdapter(baseRecyclerAdapter);
+        ((BaseRecyclerAdapter) baseRecyclerAdapter).setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int pos) {
+                for (int i = 0; i < pageList.size(); i++) {
+                    pageList.get(i).setChecked(false);
+                }
+                pageList.get(pos).setChecked(true);
+                page = pos + 1;
+                getData();
+                baseRecyclerAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private boolean isEnter = true;
@@ -225,20 +257,44 @@ public class ProtectOrderActivity extends BaseActivity {
     }
 
     private ProtectOrderBean.ProtectOrder.ProtectOrderPaging paging = null;
+    private int page = 1;
+    private int allPage = 0;
 
     private void getData() {
-        DongZhiModle.protectOrder(new HttpCallBack<ProtectOrderBean.ProtectOrder>() {
+        DongZhiModle.protectOrder(String.valueOf(page), new HttpCallBack<ProtectOrderBean.ProtectOrder>() {
             @Override
             public void success(ProtectOrderBean.ProtectOrder installOrderItems) {
                 if (installOrderItems != null) {
                     datas.clear();
-                    paging = installOrderItems.paging;
+                    if (paging == null) {
+                        paging = installOrderItems.paging;
+                        int allNum = Integer.parseInt(paging.totalcount);
+                        int nowPage = Integer.parseInt(paging.page);
+                        if (allNum != 0) {
+                            if (allNum % 10 == 0) {
+                                allPage = allNum / 10;
+                            } else {
+                                allPage = allNum / 10 + 1;
+                            }
+                            for (int i = 0; i < allPage; i++) {
+                                String thisPage = String.valueOf(i + 1);
+                                pageList.add(new PageBean(thisPage, false));
+                            }
+                            if (pageList.size() != 0) {
+                                pageList.get(0).setChecked(true);
+                                baseRecyclerAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+
                     List<ProtectOrderBean.ProtectOrder.ProtectOrderItem> list = new ArrayList<>();
+                    list = installOrderItems.yunwei_lists;
                     for (int i = 0; i < list.size(); i++) {
                         if (!list.get(i).yunwei_status.equals("2") && !("2").equals(list.get(i).yunwei_over)) {
                             datas.add(list.get(i));
                         }
                     }
+                    Log.e("123456789", "success: " + datas.toString());
                     Message msg = new Message();
                     msg.what = 1;
                     handler.sendMessage(msg);
@@ -263,7 +319,6 @@ public class ProtectOrderActivity extends BaseActivity {
                 case 1:
                     adapterRV.notifyDataSetChanged();
                     break;
-
                 case 2:
                     isEnter = true;
                     break;

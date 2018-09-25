@@ -213,18 +213,24 @@ public class MainActivity extends BaseActivity implements LocationListeners, Hin
         });
     }
 
+    private ProtectOrderBean.ProtectOrder.ProtectOrderPaging paging1 = null;
 
     private void getData() {
-        DongZhiModle.protectOrder(new HttpCallBack<ProtectOrderBean.ProtectOrder>() {
+        DongZhiModle.protectOrder("1", new HttpCallBack<ProtectOrderBean.ProtectOrder>() {
             @Override
             public void success(ProtectOrderBean.ProtectOrder installOrderItems) {
                 int num = 0;
-                List<ProtectOrderBean.ProtectOrder.ProtectOrderItem> list = new ArrayList<>();
-                for (int i = 0; i < list.size(); i++) {
-                    if (!list.get(i).yunwei_status.equals("2") && !("2").equals(list.get(i).yunwei_over)) {
-                        num++;
-                    }
+                if (installOrderItems != null && installOrderItems.paging != null) {
+                    paging1 = installOrderItems.paging;
+                    num = Integer.parseInt(paging1.totalcount);
                 }
+//                List<ProtectOrderBean.ProtectOrder.ProtectOrderItem> list = new ArrayList<>();
+//                list = installOrderItems.yunwei_lists;
+//                for (int i = 0; i < list.size(); i++) {
+//                    if (!list.get(i).yunwei_status.equals("2") && !("2").equals(list.get(i).yunwei_over)) {
+//                        num++;
+//                    }
+//                }
                 Message msg = new Message();
                 msg.what = 1;
                 Bundle bundle = new Bundle();
@@ -251,17 +257,17 @@ public class MainActivity extends BaseActivity implements LocationListeners, Hin
 
     private int data1 = 0;
     private int data2 = 0;
+    private InstallOrderBean.InstallOrder.InstallOrderPaging paging2 = null;
 
     private void getData2() {
-        DongZhiModle.installOrder(new HttpCallBack<InstallOrderBean.InstallOrder>() {
+        DongZhiModle.installOrder("1", new HttpCallBack<InstallOrderBean.InstallOrder>() {
             @Override
             public void success(InstallOrderBean.InstallOrder installOrderItems) {
                 int num = 0;
-                List<InstallOrderBean.InstallOrder.InstallOrderItem> list = new ArrayList<>();
-                for (int i = 0; i < list.size(); i++) {
-                    if (!list.get(i).status.equals("2") && !"2".equals(list.get(i).is_over)) {
-                        num++;
-                    }
+
+                if (installOrderItems != null && installOrderItems.paging != null) {
+                    paging2 = installOrderItems.paging;
+                    num = Integer.parseInt(paging2.totalcount);
                 }
                 Message msg = new Message();
                 msg.what = 2;
