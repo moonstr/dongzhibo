@@ -585,10 +585,11 @@ public class DongZhiModle {
      *
      * @param callBack
      */
-    public static void installOrder(final HttpCallBack<InstallOrderBean.InstallOrder> callBack) {
+    public static void installOrder(String page,final HttpCallBack<InstallOrderBean.InstallOrder> callBack) {
         String url = baseUrl + "/index.php?s=/api/Zhuangji/my_lists";
         Map<String, String> map = new HashMap<>();
         map.put("ucode", (String) SPUtils.get(Constants.KEY_UCODE, ""));
+        map.put("page", page);
         OkHttpUtils.postForm(url, map, new HttpCallBack<String>() {
             @Override
             public void success(String s) {

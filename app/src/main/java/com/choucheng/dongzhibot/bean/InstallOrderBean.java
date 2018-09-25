@@ -53,9 +53,9 @@ public class InstallOrderBean extends BaseBean<InstallOrderBean.InstallOrder> {
         }
 
         public class InstallOrderPaging {
-            public String page;
-            public String totalcount;
-            public String numberofpage;
+            public String page;//页码
+            public String totalcount;//总数
+            public String numberofpage;//每页数量
 //             "page": "1",
 //                     "totalcount": "1",
 //                     "numberofpage": "10"
