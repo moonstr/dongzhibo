@@ -22,7 +22,6 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
         android:background="@color/white"
         android:divider="@color/app_bg"
         android:dividerHeight="8dp" />
